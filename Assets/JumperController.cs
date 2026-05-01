@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using TMPro;
 using static TMPro.TextMeshProUGUI;
+using UnityEditorInternal;
 public class JumperController : MonoBehaviour
 {
     public bool isRunning;
@@ -20,6 +21,8 @@ public class JumperController : MonoBehaviour
     private bool spawned;
     private float waitForCheck;
     public TextMeshProUGUI scoreText;
+    public Animator a;
+    public UnityEngine.AnimatorControllerParameter p;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -33,11 +36,14 @@ public class JumperController : MonoBehaviour
         transform = gameObject.transform;
         yPos = 5;
         asource = gameObject.GetComponent<AudioSource>();
+        a = gameObject.GetComponent<Animator>();
+        p = a.parameters[0];
     }
 
     // Update is called once per frame
     void Update()
     {
+        p.defaultBool = true;
         scoreText.text = "Score: " + score;
         waitForCheck = waitForCheck - Time.deltaTime;
         yPos = transform.position.y;
@@ -50,7 +56,7 @@ public class JumperController : MonoBehaviour
         {
             //inAir = false;
         }
-
+        
         if (Keyboard.current.aKey.isPressed)
         {
             rb.linearVelocity = new Vector2(-movementSpeed, rb.linearVelocity.y);
@@ -76,6 +82,16 @@ public class JumperController : MonoBehaviour
         
         
     }
+
+    private void checkDead()
+    {
+        if (yPos <= (0 - 4.5)){}
+        {
+            SceneManager.LoadScene("gameOver");
+            gameObject.SetActive(false);
+        }
+    }
+
     void OnCollisionEnter2D(Collision other)
     {
        if(other.gameObject.CompareTag("Platform"))
@@ -91,14 +107,7 @@ public class JumperController : MonoBehaviour
         } 
     }
 
-    private void checkDead()
-    {
-        if (yPos <= (0 - 4.5)){}
-        {
-            SceneManager.LoadScene("gameOver");
-            gameObject.SetActive(false);
-        }
-    }
+ 
     void OnCollisionStay2D(Collision other)
     {
         if(other.gameObject.CompareTag("Platform"))
