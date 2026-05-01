@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Test : MonoBehaviour
+public class MenuButtonController : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        
         
     }
 
@@ -12,5 +14,9 @@ public class Test : MonoBehaviour
     void Update()
     {
         
+    }
+    public void StartGame()
+    {
+        SceneManager.LoadScene("gameplay");
     }
 }
